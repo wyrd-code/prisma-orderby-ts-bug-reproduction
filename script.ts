@@ -5,7 +5,6 @@ const prisma = new PrismaClient()
 async function main() {
   // Note: this works
   const allUsers1 = await prisma.user.findMany({
-    include: { posts: true },
     orderBy: [
       {
         email: 'desc',
@@ -28,7 +27,6 @@ async function main() {
   ]
 
   const allUsers2 = await prisma.user.findMany({
-    include: { posts: true },
     orderBy,
   })
   console.dir(allUsers2, { depth: null })
