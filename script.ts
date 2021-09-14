@@ -2,20 +2,36 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-// A `main` function so that you can use async/await
 async function main() {
-  const allUsers = await prisma.user.findMany({
+  // Note: this works
+  const allUsers1 = await prisma.user.findMany({
     include: { posts: true },
     orderBy: [
       {
         email: 'desc',
       },
-      {
-        name: 'desc',
-      },
-    ]
+    ],
   })
-  console.dir(allUsers, { depth: null })
+  console.dir(allUsers1, { depth: null })
+
+  // Note: this throws a TS error
+  /*
+    Type '{ email: string; }' is not assignable to type 'UserOrderByWithRelationInput'.
+      Types of property 'email' are incompatible.
+        Type 'string' is not assignable to type 'SortOrder | undefined'.
+
+  */
+  const orderBy = [
+    {
+      email: 'desc',
+    },
+  ]
+
+  const allUsers2 = await prisma.user.findMany({
+    include: { posts: true },
+    orderBy,
+  })
+  console.dir(allUsers2, { depth: null })
 }
 
 main()
